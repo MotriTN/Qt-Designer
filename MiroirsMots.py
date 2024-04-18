@@ -1,47 +1,42 @@
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QApplication
 
-def verif1(N):
-    if N.find("  ")==-1:
-        return False
-    else:
-        return True
-
-def verif2(N):
+def verif(N):
     i=0
     v=True
     while i <len(N) and v==True:
-        if not  "a"<=N[i]<="z":
+        if not  ("a"<=N[i]<="z" or N[i]==" "):
             v=False
         i+=1
     return v
-def Miroir(N):
-    if N.find(" ")==-1:
-        return N[::-1]
-    else:
-        f=""
-        for i in range(len(ch)):
-            s=i
-            s=N[s:].find(" ")
-            ch=N[:s]
-            ch=ch[::-1]
-            f+=ch
-        return f
-            
+def Miroir(ch):
+    ph=""
+    ch=ch+" "
+    while ch.find(" ")!=-1:
+        p=ch.find(" ")
+        ph+=inverse(ch[:p])+" "
+        ch=ch[p+1:]
+       
+    return ph
+def inverse(ch):
+    ph=""
+    for i in range(0,len(ch),-1):
+        ph+=ch[i]
+    return ph
 def Play():
-    N=w.N.Text()
-    if N.isdigit()==True:
+    N=w.N.text()
+    if N=="":
         w.R.setText("Veuillez Introduire une chaine")
-    elif verif1(N)==False:
+    elif N.find("  ")!=-1:
         w.R.setText("Entre 2 mots un seul espace est autorisé")
-    elif len(N)>=50 or N=="":
-        w.R.setText("Veuillez essayer une chaine inf à 50 et non vide")
-    elif verif2(N)==False:
-        w.R.setText("La Chaine doit étre en minuscule")    
+    elif len(N)>=50 or verif(N)==False:
+        w.R.setText("Veuillez essayer une chaine valide")
     else:
         w.R.setText(Miroir(N))
+        
 app = QApplication([])
 w = loadUi ("InterfaceMiroirsMots.ui")
 w.show()
 w.B.clicked.connect(Play)
 app.exec_()
+
